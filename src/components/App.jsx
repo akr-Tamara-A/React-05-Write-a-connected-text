@@ -60,8 +60,7 @@ function App() {
                 return (
                   <PageButton 
                     key={page} 
-                    currentPage = {currentPage}
-                    value={page}
+                    disabled={page === currentPage}
                     onClick={() => handleGetPage(page)}
                   >
                     {page}
@@ -89,8 +88,7 @@ function App() {
                 return (
                   <PageButton 
                     key={page} 
-                    currentPage = {currentPage}
-                    value={page}
+                    disabled={page === currentPage}
                     onClick={() => handleGetPage(page)}
                   >
                     {page}
@@ -150,14 +148,42 @@ const Button = styled.button`
   font-weight: 600;
   color: white;
   border-radius: 2px;
+  cursor: pointer;
+  transition-duration: .35s;
+  transition-timing-function: 'easy';
+
+  &:hover {
+    background-color: #ca6fb0;
+  }
+
+  &:disabled {
+    background-color: #a693a1;
+    cursor: default;
+  }
 `;
 
 const PageButton = styled.button`
   margin: .2em;
   padding: .5em;
-  background-color: ${props => props.value === props.currentPage ? '#c484b2' : '#fff'};
+  background-color: #fff;
+  /* background-color: ${props => props.value === props.currentPage ? '#c484b2' : '#fff'}; */
   border: none;
   font-size: 16px;
   font-weight: 600;
-  color: ${props => props.value === props.currentPage ? '#fff' : '#a693a1'};
+  /* color: ${props => props.value === props.currentPage ? '#fff' : '#a693a1'}; */
+  color: #a693a1;
+  cursor: pointer;
+  transition-duration: .35s;
+  transition-timing-function: 'easy';
+
+  &:hover {
+    background-color: #c484b2;
+    color: #fff;
+  }
+
+  &:disabled {
+    background-color: #c484b2;
+    color: #fff;
+    cursor: default;
+  }
 `;

@@ -5,7 +5,7 @@ import { getWords } from "../utils/utils";
 
 function Form(props) {
   const [words, setWords] = useState([]);
-  const [textareaValue, setTextareaValue] = useState([]);
+  const [textareaValue, setTextareaValue] = useState("");
 
   /** */
   const handleButton = () => {
@@ -50,7 +50,7 @@ function Form(props) {
       </FormResult>
       <FormWrapper onSubmit={handleSubmit}>
         <FormTextarea type="text" onChange={handleText} value={textareaValue} minLength='200' maxLength='2000' />
-        <FormButton>Запушить</FormButton>
+        <FormButton disabled={textareaValue.length < 200}>Запушить</FormButton>
       </FormWrapper>
     </>
   );
@@ -83,6 +83,18 @@ const FormButton = styled.button`
   font-weight: 600;
   color: white;
   border-radius: 2px;
+  cursor: pointer;
+  transition-duration: .35s;
+  transition-timing-function: 'easy';
+
+  &:hover {
+    background-color: #ca6fb0;
+  }
+
+  &:disabled {
+    background-color: #a693a1;
+    cursor: default;
+  }
 `;
 
 const FormResult = styled.div`
