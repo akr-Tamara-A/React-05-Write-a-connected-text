@@ -9,6 +9,7 @@ function Form(props) {
 
   /** */
   const handleButton = () => {
+    setTextareaValue("");
     setWords(getWords());
   };
 
