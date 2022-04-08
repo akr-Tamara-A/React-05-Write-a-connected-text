@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import Header from './Header';
@@ -8,25 +7,104 @@ import Section from './Section';
 
 function App() {
   const [texts, setTexts] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesOnPage = 1;
 
+  /** */
   useEffect(() => {
     if(localStorage.getItem('texts')) {
       setTexts(JSON.parse(localStorage.getItem('texts')));
     }
   }, []);
 
+  /** */
+  useEffect(() => {
+    const pages = Math.ceil(texts.length / articlesOnPage);
+    const arr = [];
+    for (let i = 1; i <= pages; i++) {
+      arr.push(i);
+    }
+    setPages(arr);
+  }, [texts]);
+
+  /** */
   const handleGetNewText = (newText) => {
     setTexts([newText, ...texts]);
     localStorage.setItem('texts', JSON.stringify([newText, ...texts]));
   }
 
+  /** */
+  const handleGetPage = (page) => {
+    setTimeout(() => {
+      setCurrentPage(page);
+    }, 200);
+  }
+
+  /** */
   return (
     <>
       <Page>
         <PageWrapper>
           <Header />
           <Form getNewText={handleGetNewText}/>
-          <Section setTexts={texts}/>
+          <div>
+            <Button 
+              onClick={() => {handleGetPage(currentPage - 1)}}
+              disabled={currentPage <= 1}
+            >
+              &lt;
+            </Button>
+            {
+              texts && pages.map((page) => {
+                return (
+                  <PageButton 
+                    key={page} 
+                    currentPage = {currentPage}
+                    value={page}
+                    onClick={() => handleGetPage(page)}
+                  >
+                    {page}
+                  </PageButton>
+                )
+              })
+            }
+            <Button 
+              onClick={() => {handleGetPage(currentPage + 1)}}
+              disabled={currentPage >= pages.length}
+            >
+              &gt;
+            </Button>
+          </div>
+          <Section setTexts={texts.slice((currentPage - 1) * articlesOnPage, currentPage * articlesOnPage)}/>
+          <div>
+            <Button 
+              onClick={() => {handleGetPage(currentPage - 1)}}
+              disabled={currentPage <= 1}
+            >
+              &lt;
+            </Button>
+            {
+              texts && pages.map((page) => {
+                return (
+                  <PageButton 
+                    key={page} 
+                    currentPage = {currentPage}
+                    value={page}
+                    onClick={() => handleGetPage(page)}
+                  >
+                    {page}
+                  </PageButton>
+                )
+              })
+            }
+            <Button 
+              onClick={() => {handleGetPage(currentPage + 1)}}
+              disabled={currentPage >= pages.length}
+            >
+              &gt;
+            </Button>
+          </div>
         </PageWrapper>
       </Page>
       <GlobalStyles />
@@ -61,4 +139,25 @@ const PageWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex-grow: 1;
+`;
+
+const Button = styled.button`
+  margin: 1em;
+  padding: .5em;
+  background-color: ${props => props.disabled ? '#a693a1' : '#c484b2'};
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  border-radius: 2px;
+`;
+
+const PageButton = styled.button`
+  margin: .2em;
+  padding: .5em;
+  background-color: ${props => props.value === props.currentPage ? '#c484b2' : '#fff'};
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${props => props.value === props.currentPage ? '#fff' : '#a693a1'};
 `;
